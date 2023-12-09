@@ -2,8 +2,12 @@ const typeA = document.querySelector(".typeA");
 const typeB = document.querySelector(".typeB");
 const moreInfoA = document.querySelector(".more-infoA");
 const moreInfoB = document.querySelector(".more-infoB");
-const trailerVid = document.querySelector(".trailer");
-const container = document.querySelector(".container");
+const trailerVid1 = document.querySelector(".trailer1");
+const trailerVid2 = document.querySelector(".trailer2");
+const trailerVid3 = document.querySelector(".trailer3");
+const container1 = document.querySelector(".container1");
+const container2 = document.querySelector(".container2");
+const container3 = document.querySelector(".container3");
 
 typeA.addEventListener("mouseenter", function() {
     moreInfoA.style.display = "flex";
@@ -57,25 +61,78 @@ const animeList = [
     }  
 ];
 
+const containers = [container1, container2, container3];
+const trailerVids = [trailerVid1, trailerVid2, trailerVid3];
+
 // On/Off Hero Container
 
 function displayOff() {
-    container.style.opacity = 0;
+    containers.forEach(function(container){
+        container.style.opacity = 0; 
+    })
 }
 
 function displayOn() {
-    container.style.opacity = 0.8;
+    containers.forEach(function(container){
+        container.style.opacity = 0.8; 
+    })}
+
+// Slide Show
+let slideIndex = 1;
+showSlides(slideIndex);
+
+
+// Next/previous controls
+function plusSlides(n) {
+    showSlides(slideIndex += n);
+    trailerVid.pause()
 }
 
-// Load Video Trailer
+// Thumbnail image controls
+function currentSlide(n) {
+    showSlides(slideIndex = n);
+}
 
-trailerVid.addEventListener("mouseenter", function() {
-    trailerVid.play();
-    displayOff();
-})
+function showSlides(n) {
+    let i;
+    let slides = document.getElementsByClassName("my-slide");
+    let dots = document.getElementsByClassName("dot");
+    if (n > slides.length) {slideIndex = 1}
+    if (n < 1) {slideIndex = slides.length}
 
-trailerVid.addEventListener("mouseleave", function() {
-    trailerVid.pause();
-    displayOn();
-})
+    for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+    }
 
+    for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+    }
+
+    slides[slideIndex-1].style.display = "block";
+    dots[slideIndex-1].className += " active";
+
+    // ON/OFF HERO CONTAINER ONPAUSE/ONPLAYING 
+    
+    trailerVids.forEach(function(trailerVid) {
+
+        trailerVid.onpause = function() {
+            displayOn();
+        }
+        trailerVid.onplaying = function() {
+            displayOff();
+        }
+
+        // Load Video Trailer
+
+        trailerVid.addEventListener("onclick", function() {
+            trailerVid.play();
+            displayOff();
+        });  
+
+        trailerVid.addEventListener("onclick", function() {
+            trailerVid.pause();
+            displayOn();
+        });
+
+    })
+}
