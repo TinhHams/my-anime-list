@@ -115,6 +115,8 @@ function showSlides(n) {
     
     trailerVids.forEach(function(trailerVid) {
 
+        trailerVid.pause();
+
         trailerVid.onpause = function() {
             displayOn();
         }
